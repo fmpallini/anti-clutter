@@ -58,24 +58,9 @@ dc.clicrbs.com.br##.section-advertising-middle-1.section-advertising-middle
 ||gazetadopovo.com.br/public/_css/paywall.css*$stylesheet
 gazetadopovo.com.br##.c-assine-container
 
-! The New York Times - https://nytimes.com
-/mtr.js$script,domain=nyt.com|nytimes.com
-nytimes.com##.InlineMessage-inline--2ysnq
-nytimes.com##.e1i2wxpm0.css-mlcs8h.shown
-||meter-svc.nytimes.com^$xhr,1p
-
-! The Economist
-||tinypass.com^$domain=economist.com
-
-! Washington Post - https://washingtonpost.com
-||*.washingtonpost.com/wp-stat/pwapi/*
-
 ! Tynypass - https://tinypass.com
 ||tinypass.com^$third-party
 tinypass.min.js*$script
-
-! New Statesman
-||ev.newstatesman.com/acd/api/*$xhr,1p
 
 ! Neatdeal - https://netdeal.com.br
 ||netdeal.com.br^$third-party
@@ -97,14 +82,11 @@ fivewall.js*$script
 !-------------------------- Anti-Adblock --------------------------!
 !------------------------------------------------------------------!
 
-||screechingfurniture.com$script
 @@/wp-content/themes/Sophia/js/advertisement.js$script
-@@||blurei.com$generichide
 @@||animesvision.com.br*$generichide
 @@/jannah/*js/advertisement.js|$~third-party
-@@/ads.js$script,domain=adflyk.com|clk.sh|2fly.me|gamersclub.com.br
+@@/ads.js$script,domain=gamersclub.com.br
 @@||gamersclub.com.br/assets/js/shared/trackings/adsbygoogle.js
-@@||neowin.net$generichide
 @@||www.isptools.com.br/js/ads.js$script,1p
 
 !------------------------------------------------------------------!
@@ -125,49 +107,25 @@ modal-extensao.*$domain=canaltech.com.br
 ||pushalert.co^$third-party
 ||pushnews.eu^$third-party
 ||cdn.pn.vg^$third-party
-||redditstatic.com/desktop2x/PushNotifications*$script,domain=reddit.com
 @@||www.googletagmanager.com/gtag/js$script,domain=eneldistribuicaosp.com.br
 @@||ticket.com.br/souticket/assets/components/*$script,domain=ticket.com.br
 @@||ipinfo.io^$xmlhttprequest,domain=brasilbandalarga.com.br
 @@||www.isptools.com.br/js/ads.js$script,1p
-@@||onifile.com$generichide
 ||conteudo.jsuol.com.br/p/perfil/js/widgetNotify.v3.js$xhr,domain=uol.com.br,important
 ||c.jsuol.com.br/assets/?loadComponent=media&contentType=js&tpl=assets/dist/service-worker/webalert-notification*$script,domain=www.uol.com.br
 gazetadopovo.com.br##+js(abort-on-property-write.js, copyRight)
 uol.com.br##+js(addEventListener-defuser.js, copy)
 infomoney.com.br##+js(abort-on-property-read.js, addLink)
-theverge.com##+js(setTimeout-defuser.js, (), 1500)
-majorgeeks.com##+js(abort-on-property-read.js, googletag)
-majorgeeks.com##+js(abort-current-inline-script.js, document.getElementById, undefined)
 @@||hcaptcha.com
 ||pourdear.com^$script,domain=vizer.tv
-@@||streameast.live^$generichide
-streameast.live##+js(nobab)
 ||cdn.pn.vg^$script,domain=r7.com
 ||noticias.r7.com/pushnews-sw.js$xhr,1p
-
-!------------------------------------------------------------------!
-!-------------------------- Experimental --------------------------!
-!------------------------------------------------------------------!
-
-! Bloqueia a exibição automática do próximo vídeo.
-!||facebook.com/video/*/upnext^$xmlhttprequest
-
-! Não exibe que a mensagem foi visualizada por você no Facebook
-!/ajax/mercury/change_read_status.php$xmlhttprequest,domain=facebook.com|messenger.com
-
-! Bloqueia o stories na página inicial do Facebook
-!facebook.com###stories_pagelet_below_composer
-
-! Bloqueia a tela de branca de progaganda do YouTube
-youtube.com##+js(set, ytInitialPlayerResponse.adPlacements, undefined)
 
 !------------------------------------------------------------------!
 !----------------------------- Pop-ups ----------------------------!
 !------------------------------------------------------------------!
 
 *$popup,domain=filmesonlinehd1x.com|mmfilmes.tv|megafilmesahd.com|assistirfilmesonline.cc|thenightfilmes.net|thenightseries.net|fbseries.com|megacinefilmes.com|superflix.net|overflix.net|animescx.net|topflix.tv|vizer.tv,third-party
-magnific-popup.js$script
 ! 2024-02-21 https://statusinvest.com.br
 statusinvest.com.br##.undefined.popup-fixed
 
@@ -178,10 +136,6 @@ statusinvest.com.br##.undefined.popup-fixed
 omelete.com.br##.banner
 r7.com###vertical-header-ads
 ahnegao.com.br##.le-publicidade
-artstation.com##support-artstation-block
-coub.com##.active.timeline-banner.coub
 uol.com.br##.bannersticky-base
 uol.com.br##div.bg-banner.ads-wrapper
-twitch.tv##.tw-z-above.tw-relative.tw-full-width.tw-c-text-base.blue-bar
-jsfiddle.net###keep-us-running
 
