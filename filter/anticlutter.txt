@@ -63,6 +63,11 @@ netdeal.js*$script
 ||authp.abril.com.br/paywall/*$xhr,1p
 ||*.cloudfunctions.net^$xhr,domain=veja.abril.com.br
 
+! Abril (Quatro Rodas, Veja e demais sites) - paywall medido e detector de adblock
+||abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/$script,1p
+||abril.com.br/wp-content/plugins/abril-plugins/abril-adblock-detector/$script,1p
+||fundingchoicesmessages.google.com^$domain=abril.com.br
+
 ! Fivewall - https://fivewall.com.br
 ||fivewall.com.br^$third-party
 fivewall.js*$script
