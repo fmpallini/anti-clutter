@@ -1,0 +1,12 @@
+name = "anti-clutter-br"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+LIST_URL = "https://raw.githubusercontent.com/fmpallini/anti-clutter/master/filter/anticlutter.txt"
+WINDOW_DAYS = "7"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "anti-clutter-br"
+database_id = "3ec4777b-df58-4416-90a5-6ac068b5b85c"

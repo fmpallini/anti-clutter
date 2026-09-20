@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS visitors (
+  h  TEXT PRIMARY KEY,
+  ts INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS visitors_ts ON visitors (ts);
