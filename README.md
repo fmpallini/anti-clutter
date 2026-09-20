@@ -5,9 +5,18 @@ Lista de filtros contra anti-adblock, paywall, pop-ups e anúncios em **sites br
 > **Fork.** Este projeto é um fork de [ialexsilva/anti-clutter](https://github.com/ialexsilva/anti-clutter), de Alex Silva, mantido agora com foco exclusivo em sites brasileiros. As regras de sites internacionais foram removidas e as demais são revisadas periodicamente contra os sites reais.
 
 ### Instalação
-[Inscreva-se](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/fmpallini/anti-clutter/master/filter/anticlutter.txt&title=Anti-Clutter%20BR)
+Endereço da lista (funciona em qualquer bloqueador que aceite listas por URL):
 
-Link direto: https://raw.githubusercontent.com/fmpallini/anti-clutter/master/filter/anticlutter.txt
+```
+https://raw.githubusercontent.com/fmpallini/anti-clutter/master/filter/anticlutter.txt
+```
+
+Cole esse endereço no campo de lista personalizada do seu bloqueador:
+
+- **uBlock Origin**: Painel de controle > Listas de filtros > *Importar...* > cole o endereço > *Aplicar mudanças*.
+- **AdGuard** (extensão): Configurações > Filtros > Filtros personalizados > *Adicionar filtro personalizado* > cole o endereço.
+- **Adblock Plus**: Configurações avançadas > *Adicionar nova lista de filtros* (Filter lists > Add a filter list) > cole o endereço.
+- **Brave**: Configurações > Shields > *Content filtering* > *Add custom filter list* > cole o endereço.
 
 ### Compatibilidade
 - Regras de rede e cosméticas funcionam em qualquer bloqueador compatível com a sintaxe do Adblock Plus.
