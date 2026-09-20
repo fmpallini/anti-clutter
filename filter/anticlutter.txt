@@ -12,8 +12,6 @@
 
 ! O Globo - https://oglobo.globo.com
 ||static.infoglobo.com.br/paywall/*
-||ogjs.infoglobo.com.br/*/js/contadorDeAcessos.js*$script
-||ogjs.infoglobo.com.br/*/js/controla-acesso-aux.js*$script
 oglobo.globo.com##barreiraRegisterExclusiva
 oglobo.globo.com##section.block--advertising.block
 oglobo.globo.com##section.four-subpanes-with-advertising.block
@@ -32,8 +30,6 @@ folha.uol.com.br##.c-push-notification
 ! Estadão - https://estadao.com.br
 ||*.estadao.com.br/paywall/*
 estadao.com.br##paywall-wrapper-iframe-estadao
-||estadao.com.br/estadao/js/modules/navegg*$script
-||estadao.com.br/web-push/modal-naoassinante$xmlhttprequest,first-party
 @@/s2016/portal/js/advertisement.js$script,domain=estadao.com.br
 www.estadao.com.br##.assine-bar
 
@@ -41,13 +37,7 @@ www.estadao.com.br##.assine-bar
 ||*.jota.info/wp-content/themes/JOTA/assets/js/posts.js*$script
 jota.info##.jota-paywall
 
-! GaúchaZH - https://clicrbs.com.br
-||rbsonline.com.br/cdn/scripts/special-paywall.min.js*$script
-||rbsonline.com.br/cdn/scripts/paywall.min.js*$script
-||rbsonline.com.br/cdn/scripts/SLoader.js*$script
-
 ! Gazeta do Povo - https://gazetadopovo.com.br
-||gazetadopovo.com.br/public/_css/paywall.css*$stylesheet
 gazetadopovo.com.br##.c-assine-container
 
 ! Tynypass - https://tinypass.com
@@ -60,7 +50,6 @@ netdeal.js*$script
 
 ! VEJA
 ! 2022-01-06 https://veja.abril.com.br
-||authp.abril.com.br/paywall/*$xhr,1p
 ||*.cloudfunctions.net^$xhr,domain=veja.abril.com.br
 
 ! Abril (Quatro Rodas, Veja e demais sites) - paywall medido e detector de adblock
@@ -71,9 +60,6 @@ netdeal.js*$script
 ! Fivewall - https://fivewall.com.br
 ||fivewall.com.br^$third-party
 fivewall.js*$script
-
-! NSC Total - https://nsctotal.com.br/
-||paywall.nsctotal.com.br/behaviors*
 
 !------------------------------------------------------------------!
 !-------------------------- Anti-Adblock --------------------------!
