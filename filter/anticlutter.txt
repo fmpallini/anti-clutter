@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: Anti-Clutter BR
-! Version: 2026.09.20.1713
-! Last modified: 20 Sep 2026 17:13 UTC
+! Version: 2026.09.20.1720
+! Last modified: 20 Sep 2026 17:20 UTC
 ! Expires: 2 days
 ! Description: Filtros contra anti-adblock, paywall, pop-ups e anúncios em sites brasileiros, complementando listas internacionais sem conflitar com elas.
 ! Homepage: https://github.com/fmpallini/anti-clutter
@@ -104,7 +104,8 @@ modal-extensao.*$domain=canaltech.com.br
 ||conteudo.jsuol.com.br/p/perfil/js/widgetNotify.v3.js$script,domain=uol.com.br,important
 ||c.jsuol.com.br/assets/?loadComponent=media&contentType=js&tpl=assets/dist/service-worker/webalert-notification*$script,domain=www.uol.com.br
 uol.com.br##+js(addEventListener-defuser.js, copy)
-||fundingchoicesmessages.google.com^$domain=uol.com.br
+||fundingchoicesmessages.google.com^$script,domain=uol.com.br,important
+uol.com.br##.fc-ab-root, .fc-dialog-container
 @@||hcaptcha.com
 ||pourdear.com^$script,domain=vizer.tv
 ||cdn.pn.vg^$script,domain=r7.com
