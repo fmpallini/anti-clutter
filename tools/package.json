@@ -1,0 +1,11 @@
+{
+  "name": "anticlutter-tools",
+  "private": true,
+  "type": "module",
+  "description": "Ferramentas de auditoria das regras de filter/anticlutter.txt",
+  "dependencies": {
+    "@ghostery/adblocker": "^2.0.0",
+    "@ghostery/adblocker-playwright": "^2.18.2",
+    "playwright-core": "^1.50.0"
+  }
+}
