@@ -1,0 +1,16 @@
+#!/bin/sh
+# Atualiza "Version" e "Last modified" do filtro sempre que ele for commitado.
+f=filter/anticlutter.txt
+
+git diff --cached --name-only | grep -qx "$f" || exit 0
+
+if ! git diff --quiet -- "$f"; then
+  echo "pre-commit: $f tem alterações não staged; faça 'git add $f' ou descarte-as." >&2
+  exit 1
+fi
+
+v=$(LC_ALL=C date -u +%Y.%m.%d.%H%M)
+m=$(LC_ALL=C date -u '+%d %b %Y %H:%M UTC')
+sed -i -e "s/^! Version:[^\r]*/! Version: $v/" \
+       -e "s/^! Last modified:[^\r]*/! Last modified: $m/" "$f"
+git add "$f"

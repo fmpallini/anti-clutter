@@ -1,9 +1,17 @@
-! Title: Anti-Clutter by Alex Silva
+[Adblock Plus 2.0]
+! Title: Anti-Clutter BR
+! Version: 2026.09.20.1117
+! Last modified: 20 Sep 2026 11:17 UTC
 ! Expires: 2 days
-! Description: Lista de filtros contra anti-adblock, paywall, pop-ups e outros anúncios de sites de nacionais e internacionais.
-! Homepage: https://github.com/ialexsilva/anti-clutter
-! Licence: https://github.com/ialexsilva/anti-clutter/blob/master/LICENSE
-! Author: Alex Silva - https://ialexsilva.com
+! Description: Filtros contra anti-adblock, paywall, pop-ups e anúncios em sites brasileiros, complementando listas internacionais sem conflitar com elas.
+! Homepage: https://github.com/fmpallini/anti-clutter
+! Licence: https://github.com/fmpallini/anti-clutter/blob/master/LICENSE
+! Author: fmpallini - https://github.com/fmpallini
+! Fork de: https://github.com/ialexsilva/anti-clutter (Alex Silva)
+!
+! Foco: sites brasileiros. Sites estrangeiros ficam a cargo de outras listas.
+! Compatibilidade: regras de rede e cosméticas funcionam em qualquer bloqueador.
+! As regras "##+js(...)" (scriptlets) exigem uBlock Origin ou AdGuard.
 
 
 !------------------------------------------------------------------!
