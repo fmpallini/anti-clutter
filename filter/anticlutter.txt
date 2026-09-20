@@ -22,19 +22,12 @@ blogs.oglobo.globo.com###pub-fullbanner-1
 blogs.oglobo.globo.com###pub-box-materia
 oglobo.globo.com##.block__subpane--advertising.block__subpane
 
-! Folha de Londrina
-||www.netdeal.com.br^$domain=folhadelondrina.com.br
-
 ! Folha de S.Paulo - https://folha.uol.com.br
 ||paywall.folha.uol.com.br/*
 ||static.folha.uol.com.br/paywall/*
 @@||paywall.folha.uol.com.br/status.php^$document
 folha.uol.com.br##bt-read-more-content
 folha.uol.com.br##.c-push-notification
-! 2022-12-06 https://www1.folha.uol.com.br
-www1.folha.uol.com.br##.u-no-print.c-top-signup--close--bf-azul.c-top-signup--close--bf.c-top-signup--close.c-top-signup--fix.c-top-signup
-! 2024-02-21 https://www.folha.uol.com.br
-www.folha.uol.com.br##.u-no-print.c-top-signup--close--bf-bf-azul.c-top-signup--close--bf.c-top-signup--close.c-top-signup--fix.c-top-signup
 
 ! Estadão - https://estadao.com.br
 ||*.estadao.com.br/paywall/*
@@ -52,7 +45,6 @@ jota.info##.jota-paywall
 ||rbsonline.com.br/cdn/scripts/special-paywall.min.js*$script
 ||rbsonline.com.br/cdn/scripts/paywall.min.js*$script
 ||rbsonline.com.br/cdn/scripts/SLoader.js*$script
-dc.clicrbs.com.br##.section-advertising-middle-1.section-advertising-middle
 
 ! Gazeta do Povo - https://gazetadopovo.com.br
 ||gazetadopovo.com.br/public/_css/paywall.css*$stylesheet
@@ -110,8 +102,7 @@ modal-extensao.*$domain=canaltech.com.br
 @@||www.googletagmanager.com/gtag/js$script,domain=eneldistribuicaosp.com.br
 @@||ticket.com.br/souticket/assets/components/*$script,domain=ticket.com.br
 @@||ipinfo.io^$xmlhttprequest,domain=brasilbandalarga.com.br
-@@||www.isptools.com.br/js/ads.js$script,1p
-||conteudo.jsuol.com.br/p/perfil/js/widgetNotify.v3.js$xhr,domain=uol.com.br,important
+||conteudo.jsuol.com.br/p/perfil/js/widgetNotify.v3.js$script,domain=uol.com.br,important
 ||c.jsuol.com.br/assets/?loadComponent=media&contentType=js&tpl=assets/dist/service-worker/webalert-notification*$script,domain=www.uol.com.br
 gazetadopovo.com.br##+js(abort-on-property-write.js, copyRight)
 uol.com.br##+js(addEventListener-defuser.js, copy)
@@ -125,17 +116,11 @@ infomoney.com.br##+js(abort-on-property-read.js, addLink)
 !----------------------------- Pop-ups ----------------------------!
 !------------------------------------------------------------------!
 
-*$popup,domain=filmesonlinehd1x.com|mmfilmes.tv|megafilmesahd.com|assistirfilmesonline.cc|thenightfilmes.net|thenightseries.net|fbseries.com|megacinefilmes.com|superflix.net|overflix.net|animescx.net|topflix.tv|vizer.tv,third-party
-! 2024-02-21 https://statusinvest.com.br
-statusinvest.com.br##.undefined.popup-fixed
+*$popup,domain=filmesonlinehd1x.com|mmfilmes.tv|megafilmesahd.com|assistirfilmesonline.cc|thenightseries.net|fbseries.com|megacinefilmes.com|superflix.net|overflix.net|vizer.tv,third-party
 
 !------------------------------------------------------------------!
 !--------------------------- Stylesheet ---------------------------!
 !------------------------------------------------------------------!
 
 omelete.com.br##.banner
-r7.com###vertical-header-ads
-ahnegao.com.br##.le-publicidade
-uol.com.br##.bannersticky-base
-uol.com.br##div.bg-banner.ads-wrapper
 
