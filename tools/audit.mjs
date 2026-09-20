@@ -4,8 +4,8 @@
 //   adblock : simula um adblock genérico (aborta domínios de anúncio) para disparar avisos anti-adblock
 //   list    : adblock simulado + aplica de fato as regras da lista (prova o efeito das regras)
 //   --scriptlets : injeta também os scriptlets (##+js) da lista e conta quantas vezes interceptaram scripts do site
-// Chromium: defina CHROME_PATH ou rode `npx playwright-core install chromium`.
-import { chromium } from 'playwright-core';
+// Navegador: veja tools/browser.mjs (BROWSER=msedge|chrome|chromium, HEADED=1, CHROME_PATH).
+import { launchBrowser, newContext, waitForChallenge } from './browser.mjs';
 import { Request } from '@ghostery/adblocker';
 import { buildEngine, injectScriptlets, isTrapError, articleLinks } from './lib.mjs';
 import fs from 'fs';
@@ -56,18 +56,18 @@ const wallProbe = () => {
     text: document.body.innerText.length,
   };
 };
-const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
+const browser = await launchBrowser();
 
 async function auditSite(home) {
   // Um contexto por site: cookies e localStorage persistem entre artigos, o que exercita o medidor de paywall.
-  const ctx = await browser.newContext({ locale: 'pt-BR', viewport: { width: 1280, height: 800 }, ignoreHTTPSErrors: true });
+  const ctx = await newContext(browser);
   const page = await ctx.newPage();
   const traps = {};
   let cur = 0;
   if (useScriptlets) {
     page.on('pageerror', e => { if (isTrapError(e)) traps[cur] = (traps[cur] || 0) + 1; });
     const h = new URL(home).hostname;
-    await injectScriptlets(ctx, engine, [h, h.replace(/^www\./, ''), 'www.' + h.replace(/^www\./, '')]);
+    await injectScriptlets(page, engine, [h, h.replace(/^www\./, ''), 'www.' + h.replace(/^www\./, '')]);
   }
   const matched = {}, blocked = {}, gaps = {};
   await page.route('**/*', route => {
@@ -90,13 +90,15 @@ async function auditSite(home) {
   const res = { home, mode, articles: [], error: null };
   try {
     await page.goto(home, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await waitForChallenge(page);
     await page.waitForTimeout(3000);
     const links = (await page.evaluate(articleLinks)).slice(0, nArticles);
-    if (useScriptlets) await injectScriptlets(ctx, engine, links.map(l => new URL(l).hostname));
+    if (useScriptlets) await injectScriptlets(page, engine, links.map(l => new URL(l).hostname));
     for (const [i, url] of links.entries()) {
       cur = i + 1;
       try {
         await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        await waitForChallenge(page);
         await page.waitForTimeout(3500);
         for (let k = 0; k < 7; k++) { await page.mouse.wheel(0, 800); await page.waitForTimeout(350); } // scroll dispara gatilhos tardios
         await page.waitForTimeout(2500);

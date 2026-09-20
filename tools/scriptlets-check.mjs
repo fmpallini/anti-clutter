@@ -13,7 +13,7 @@
 //          tem de aparecer; se não aparecer o scriptlet nem foi instalado => BROKEN (e não DORMANT).
 // Uma regra é EFFECTIVE se ao menos uma página for EFFECTIVE; caso contrário vale o pior veredito.
 // O motor é o da Ghostery (reimplementação dos scriptlets do uBO): confirme regras novas no uBO real.
-import { chromium } from 'playwright-core';
+import { launchBrowser, newContext, waitForChallenge } from './browser.mjs';
 import { buildEngine, injectScriptlets, copyProbeInit, isTrapError, articleLinks } from './lib.mjs';
 import fs from 'fs';
 import path from 'path';
@@ -30,18 +30,19 @@ const jsRules = [...listLines].filter(l => !l.startsWith('!') && l.includes('##+
 for (const r of jsRules) if (!checks.some(c => c.rule === r) && !only) console.log('SEM CHECAGEM:', r);
 for (const c of checks) if (!listLines.has(c.rule)) console.log('REGRA AUSENTE DA LISTA:', c.rule);
 
-const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
+const browser = await launchBrowser();
 
 async function visit(url, engine, expr, control) {
-  const ctx = await browser.newContext({ locale: 'pt-BR', viewport: { width: 1280, height: 800 }, ignoreHTTPSErrors: true });
+  const ctx = await newContext(browser);
   const page = await ctx.newPage();
   let traps = 0;
   page.on('pageerror', e => { if (isTrapError(e)) traps++; });
-  await ctx.addInitScript(copyProbeInit);
-  if (engine) await injectScriptlets(ctx, engine, [new URL(url).hostname]);
+  await page.addInitScript(copyProbeInit);
+  if (engine) await injectScriptlets(page, engine, [new URL(url).hostname]);
   let value = null, error = null, controlOk = null;
   try {
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await waitForChallenge(page);
     await page.waitForTimeout(5000);
     for (let k = 0; k < 5; k++) { await page.mouse.wheel(0, 800); await page.waitForTimeout(300); }
     await page.waitForTimeout(2000);
@@ -59,11 +60,12 @@ async function visit(url, engine, expr, control) {
 
 async function pagesFor(c) {
   if (c.urls) return c.urls;
-  const ctx = await browser.newContext({ locale: 'pt-BR', ignoreHTTPSErrors: true });
+  const ctx = await newContext(browser);
   const page = await ctx.newPage();
   let links = [];
   try {
     await page.goto(c.home, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await waitForChallenge(page);
     await page.waitForTimeout(3000);
     links = (await page.evaluate(articleLinks)).slice(0, c.articles ?? 3);
   } catch {}

@@ -19,7 +19,7 @@ The user runs this locally, so assume a Brazilian IP. Geo-dependent behavior (co
 
 ```
 cd tools && npm install
-# Chromium: set CHROME_PATH to a chrome binary, or run: npx playwright-core install chromium
+# Browser: the installed Edge/Chrome is used (see "Browser"); no Playwright browser download needed
 node audit.mjs --mode plain   --articles 12 <home-url>...
 node audit.mjs --mode adblock --articles 12 <home-url>...
 node audit.mjs --mode list    --articles 12 [--out result.json] <home-url>...
@@ -27,7 +27,7 @@ node audit.mjs --mode list --scriptlets <home-url>...   # also inject the list's
 node scriptlets-check.mjs [--only "<rule fragment>"]    # validate each scriptlet rule (see below)
 ```
 
-`lib.mjs` holds shared helpers (engine + scriptlet resources, scriptlet injection, article-link heuristic).
+`browser.mjs` launches the browser, `selftest-browser.mjs` prints the automation signals it exposes, and `lib.mjs` holds shared helpers (engine + scriptlet resources, scriptlet injection, article-link heuristic).
 
 Modes (run them in this order for a site):
 
@@ -41,13 +41,34 @@ For each site it opens the home page, collects up to N article links, and visits
 
 Reported per site: articles reached, articles with a wall overlay, scroll lock, min/max text length, rules that matched (and on which article numbers), rules that actually blocked (`list` mode), cosmetic selector match counts, and **gaps** (suspicious script/xhr requests that no rule covers).
 
+### Browser
+
+The tools run the installed **Edge (or Chrome) as a normal headed process** on an off-screen window with a throwaway profile, and attach to it over CDP using its default context (`tools/browser.mjs`, "attach" mode). This is deliberate. Measured on `gamersclub.com.br` (Cloudflare):
+
+| setup | result |
+|---|---|
+| Chromium/Edge launched by Playwright, headless or headed | stuck on the "Um momento..." challenge |
+| real Edge `--headless=new` over CDP | stuck |
+| real Edge headed over CDP, **new** browser context | stuck |
+| real Edge headed over CDP, **default** context | passes in ~3 s |
+
+Consequences to keep in mind:
+- Do not register init scripts on the context in attach mode; it is the browser's default context, so they would apply to every page. Use `page.addInitScript` (the tools already do).
+- `newContext(browser)` returns that default context, and its `close()` only closes tabs. Cookies of one domain persist across a run (fresh profile per run, so metered-paywall state resets between runs).
+- A real window is opened off-screen; it may steal focus briefly on Windows.
+- `LAUNCH=playwright` (with `BROWSER`, `CHROME_PATH`, `HEADED=1`) falls back to a Playwright-launched, hardened browser (no `--enable-automation`, no `AutomationControlled`, real version in the UA, notification permission `default` so push prompts appear). It is not accepted by Cloudflare-protected sites but works elsewhere.
+- Run `node selftest-browser.mjs` to list the automation signals of the current setup.
+- The audits call `waitForChallenge()` after each navigation so an interstitial challenge is not mistaken for the page.
+
+Still blocked with a hard 403 even in the real browser: `superflix.net`, `filmesonlinehd1x.com` (their own access rules, not a challenge). `vizer.tv` and `eneldistribuicaosp.com.br` time out. Treat those as unverifiable, not dead.
+
 ### How to read the result
 
 - **Rule matched on articles**: the rule is alive. A rule that never matches on 10+ articles of its site is a removal candidate.
 - **Cosmetic selector at 0**: not proof it is dead, since the element may only exist on some page types. Check with a page where it should appear before removing.
 - **Wall in `plain`, none in `list`, and text length grows**: the list works. Compare text length: a truncated paywalled article is ~2k characters, the full one is 6k+. Use text length, not just overlay detection; the overlay heuristic is noisy (nav bars containing "assine" are ignored only by the size threshold).
 - **Gaps**: a lead, not a rule. Confirm it by adding the candidate rule and re-running `list`; add it only if the wall/text-length outcome changes. Rules that change nothing are noise (for example `piano.io` on Gazeta do Povo was unnecessary once `tinypass.com` was blocked).
-- **Site failed to load** (DNS error, 404, redirect to another domain): the rule targeting that host is dead; verify with a plain request before deleting. 403 with a Cloudflare challenge or a timeout is inconclusive, not dead: headless Chromium is being bot-blocked.
+- **Site failed to load** (DNS error, 404, redirect to another domain): the rule targeting that host is dead; verify with a plain request before deleting. 403 with a Cloudflare challenge or a timeout is inconclusive, not dead: the test browser is being blocked (see "Browser").
 
 ### Investigating a new site
 
@@ -79,11 +100,11 @@ The engine is Ghostery's reimplementation of the uBO scriptlets, not uBO itself.
 ### Known limits
 
 - No login, so post-login behavior is untested.
-- Headless Chromium can be blocked by bot protection; those sites need a manual check.
+- Some sites hard-block the test browser (403 without a challenge) or time out; those need a manual check. See "Browser".
 - `$document` rules (bet365, 1xbet, livejasmin, mackeeper) and `$popup` rules cannot be tested this way. Popups can only be checked by seeing whether a site still navigates or opens windows, which needs manual verification.
 - Exception rules (`@@`) only matter when another list blocks the same request, so they cannot be validated in isolation.
 - A metered paywall may need more reads than the article count to trigger; raise `--articles` if no wall appears in `plain` mode.
-- Anti-adblock walls (Funding Choices on Abril) were not reproducible in headless mode, so those rules are reasoned rather than verified. Check them in a real browser.
+- Anti-adblock walls from Google Funding Choices never appeared, even in the real headed Edge with ad requests aborted (UOL, Abril, GamersClub). The Abril rules are therefore reasoned from the plugin source, not verified. UOL loads Funding Choices too, but with no visible wall there is nothing to block, so no rule was added. The message may depend on per-publisher settings or user sampling (unconfirmed), so absence here is not proof it never shows.
 
 ## Workflow for changes
 
