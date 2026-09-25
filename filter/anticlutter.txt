@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: Anti-Clutter BR
-! Version: 2026.09.25.0123
-! Last modified: 25 Sep 2026 01:23 UTC
+! Version: 2026.09.25.0131
+! Last modified: 25 Sep 2026 01:31 UTC
 ! Expires: 2 days
 ! Description: Filtros contra anti-adblock, paywall, pop-ups e anúncios em sites brasileiros, complementando listas internacionais sem conflitar com elas.
 ! Homepage: https://github.com/fmpallini/anti-clutter
@@ -37,6 +37,7 @@ folha.uol.com.br##.c-push-notification
 
 ! Estadão - https://estadao.com.br
 ||*.estadao.com.br/paywall/*
+||assets.estadao.com.br/access.js$script
 estadao.com.br##paywall-wrapper-iframe-estadao
 @@/s2016/portal/js/advertisement.js$script,domain=estadao.com.br
 www.estadao.com.br##.assine-bar
