@@ -78,7 +78,8 @@ When the tool shows a wall but no rule matches, find the mechanism before writin
 2. List the third-party and first-party scripts requested; look for plugin paths named `paywall`, `adblock`, `piano`, `zephr`, `fundingchoices`.
 3. Fetch the suspicious script with `curl -A "Mozilla/5.0"` and read it. The Abril `custom-fc.js` showed the anti-adblock wall is Google Funding Choices loaded on first scroll.
 4. Prefer blocking the **loader script** over hiding the overlay. Blocking the loader prevents the wall, the scroll lock and the metering in one rule.
-5. Add the rule, run `--mode list`, and confirm walls go to zero and text length is full across 12+ articles.
+5. Do not block a whole paywall host (`||paywall.site/*`) without listing everything that host serves. Paywall hosts often also serve the **login round-trip** and the **logged-in status call**, and blocking them breaks login while the audit still shows zero walls and full text. On Folha, `paywall.folha.uol.com.br` serves the wall (`wall.js`), but also `/folha/login` -> `login.folha.com.br` -> `/folha/retorno` (sets the session cookie) and `digital.jsonp` (reports `logged`/`subscriber`). The blanket rule made login impossible until it became `||paywall.folha.uol.com.br/*$script,xhr` plus `@@||paywall.folha.uol.com.br/digital.jsonp^$script`. Block by type or exact loader path, and check the login flow: `curl -sI` the site's login link, follow each `Location`, and match every hop (as `main_frame`) against the engine to confirm none is blocked.
+6. Add the rule, run `--mode list`, and confirm walls go to zero and text length is full across 12+ articles.
 
 ### Scriptlets (`##+js(...)`)
 
@@ -99,7 +100,7 @@ The engine is Ghostery's reimplementation of the uBO scriptlets, not uBO itself.
 
 ### Known limits
 
-- No login, so post-login behavior is untested.
+- No login, so post-login behavior is untested. The audit cannot catch a rule that breaks login (see step 5 of "Investigating a new site"); check login redirects by hand and ask the user to confirm on a real account.
 - Some sites hard-block the test browser (403 without a challenge) or time out; those need a manual check. See "Browser".
 - `$document` rules (bet365, 1xbet, livejasmin, mackeeper) and `$popup` rules cannot be tested this way. Popups can only be checked by seeing whether a site still navigates or opens windows, which needs manual verification.
 - Exception rules (`@@`) only matter when another list blocks the same request, so they cannot be validated in isolation.
