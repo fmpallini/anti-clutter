@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: Anti-Clutter BR
-! Version: 2026.09.28.0046
-! Last modified: 28 Sep 2026 00:46 UTC
+! Version: 2026.09.28.0057
+! Last modified: 28 Sep 2026 00:57 UTC
 ! Expires: 2 days
 ! Description: Filtros contra anti-adblock, paywall, pop-ups e anúncios em sites brasileiros, complementando listas internacionais sem conflitar com elas.
 ! Homepage: https://github.com/fmpallini/anti-clutter
@@ -71,12 +71,6 @@ netdeal.js*$script
 fivewall.js*$script
 
 !------------------------------------------------------------------!
-!-------------------------- Anti-Adblock --------------------------!
-!------------------------------------------------------------------!
-
-@@||animesvision.com.br*$generichide
-
-!------------------------------------------------------------------!
 !------------------------- Aborrecimentos -------------------------!
 !------------------------------------------------------------------!
 
@@ -84,7 +78,6 @@ fivewall.js*$script
 ! 2024-02-21 https://statusinvest.com.br
 statusinvest.com.br##.to-load.pt-5.pr-sm-0.pl-sm-0.ads-lazy-group
 statusinvest.com.br##.container-home-ads-thin.container
-modal-extensao.*$domain=canaltech.com.br
 ||pushnews.eu^$third-party
 @@||www.googletagmanager.com/gtag/js$script,domain=eneldistribuicaosp.com.br
 ! UOL - https://www.uol.com.br
@@ -110,4 +103,4 @@ r7.com##.ad-header-size
 !----------------------------- Pop-ups ----------------------------!
 !------------------------------------------------------------------!
 
-*$popup,domain=filmesonlinehd1x.com|mmfilmes.tv|megafilmesahd.com|assistirfilmesonline.cc|thenightseries.net|fbseries.com|megacinefilmes.com|superflix.net|overflix.net|vizer.tv,third-party
+*$popup,domain=filmesonlinehd1x.com|thenightseries.net|superflix.net|vizer.tv,third-party

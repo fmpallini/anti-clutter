@@ -34,7 +34,7 @@ A sintaxe é validada com [AGLint](https://github.com/AdguardTeam/AGLint) para u
 ### Regras
 Sintaxe: https://adblockplus.org/filter-cheatsheet
 
-O arquivo está dividido em seções: Anti-Paywall, Anti-Adblock, Aborrecimentos (notificações push, pop-ups indesejados, bloqueio de cópia, banners) e Pop-ups.
+O arquivo está dividido em seções: Anti-Paywall (inclui detectores de adblock ligados ao paywall), Aborrecimentos (notificações push, pop-ups indesejados, bloqueio de cópia, banners) e Pop-ups.
 
 ### Licença
 [GPLv3](LICENSE).
