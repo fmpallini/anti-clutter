@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: Anti-Clutter BR
-! Version: 2026.09.28.0028
-! Last modified: 28 Sep 2026 00:28 UTC
+! Version: 2026.09.28.0046
+! Last modified: 28 Sep 2026 00:46 UTC
 ! Expires: 2 days
 ! Description: Filtros contra anti-adblock, paywall, pop-ups e anúncios em sites brasileiros, complementando listas internacionais sem conflitar com elas.
 ! Homepage: https://github.com/fmpallini/anti-clutter
@@ -41,9 +41,10 @@ folha.uol.com.br##.c-push-notification
 estadao.com.br##paywall-wrapper-iframe-estadao
 www.estadao.com.br##.assine-bar
 
-! JOTA - https://jota.info
-||*.jota.info/wp-content/themes/JOTA/assets/js/posts.js*$script
-jota.info##.jota-paywall
+! O Povo - https://www.opovo.com.br
+! Paywall medido: depois de ~2 leituras route.php responde paywall=true e o script apaga o texto já carregado.
+! O conteúdo do O POVO+ (mais.opovo.com.br) é cortado no servidor; não há o que bloquear.
+||www.opovo.com.br/DS/public/js/dev/paywall.js$script
 
 ! Gazeta do Povo - https://gazetadopovo.com.br
 gazetadopovo.com.br##.c-assine-container
