@@ -39,9 +39,14 @@ const freePort = () => new Promise(res => { const s = net.createServer().listen(
 async function attach({ executablePath, kind }) {
   const port = await freePort();
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'anticlutter-profile-'));
+  // Sem isso o Edge oferece traduzir as páginas (janela de tradução sobre o site).
+  fs.mkdirSync(path.join(profile, 'Default'));
+  fs.writeFileSync(path.join(profile, 'Default', 'Preferences'), JSON.stringify({
+    translate: { enabled: false }, intl: { accept_languages: 'pt-BR,pt,en-US,en' },
+  }));
   const proc = spawn(executablePath, [
     `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, '--no-first-run', '--no-default-browser-check',
-    '--disable-sync', '--disable-features=msImplicitSignin,msEdgeSyncWelcome,msSyncConsent', '--window-position=-2400,0', '--window-size=1366,768', '--lang=pt-BR', 'about:blank',
+    '--disable-sync', '--disable-features=msImplicitSignin,msEdgeSyncWelcome,msSyncConsent,Translate,TranslateUI,msTranslations', '--window-position=-2400,0', '--window-size=1366,768', '--lang=pt-BR', 'about:blank',
   ], { stdio: 'ignore' });
   for (let i = 0; i < 40; i++) { // espera o endpoint CDP subir
     try { if ((await fetch(`http://127.0.0.1:${port}/json/version`)).ok) break; } catch {}
