@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: Anti-Clutter BR
-! Version: 2026.09.28.0118
-! Last modified: 28 Sep 2026 01:18 UTC
+! Version: 2026.09.28.0124
+! Last modified: 28 Sep 2026 01:24 UTC
 ! Expires: 2 days
 ! Description: Filtros contra anti-adblock, paywall, pop-ups e anúncios em sites brasileiros, complementando listas internacionais sem conflitar com elas.
 ! Homepage: https://github.com/fmpallini/anti-clutter
@@ -25,7 +25,6 @@
 ||paywall.folha.uol.com.br/*$script,xhr
 @@||paywall.folha.uol.com.br/digital.jsonp^$script
 ||static.folha.uol.com.br/paywall/*
-folha.uol.com.br##bt-read-more-content
 folha.uol.com.br##.c-push-notification
 
 ! Estadão - https://estadao.com.br
@@ -79,9 +78,3 @@ r7.com##div[class*="card-fixed"]:has(.push-web-notification__button)
 r7.com##.vjs-r7-block-msg
 r7.com##header .b-header-link
 r7.com##.ad-header-size
-
-!------------------------------------------------------------------!
-!----------------------------- Pop-ups ----------------------------!
-!------------------------------------------------------------------!
-
-*$popup,domain=filmesonlinehd1x.com|thenightseries.net|superflix.net|vizer.tv,third-party

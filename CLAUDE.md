@@ -1,6 +1,6 @@
 # Anti-Clutter BR
 
-Filter list (Adblock Plus syntax) that blocks paywalls, anti-adblock walls, push prompts, pop-ups and ads on **Brazilian sites only**. It complements international lists (EasyList, uBlock filters) and must not duplicate them. Foreign-site rules do not belong here.
+Filter list (Adblock Plus syntax) that blocks paywalls, anti-adblock walls, push prompts, pop-ups and ads on **Brazilian sites only**. It complements international lists (EasyList, uBlock filters) and must not duplicate them. Foreign-site and pirate-site rules do not belong here. Vendor rules (Piano/Tinypass, Netdeal, Fivewall, Pushnews) are fine when Brazilian sites use them.
 
 - The list is `filter/anticlutter.txt`. Docs and user-facing text are in Portuguese.
 - This is a fork of `ialexsilva/anti-clutter`; keep the credit in the header and README.
@@ -62,7 +62,7 @@ Consequences to keep in mind:
 - Run `node selftest-browser.mjs` to list the automation signals of the current setup.
 - The audits call `waitForChallenge()` after each navigation so an interstitial challenge is not mistaken for the page.
 
-Unverifiable from this machine: `superflix.net`, `filmesonlinehd1x.com`, `thenightseries.net` and `vizer.tv` are intercepted by the local antivirus web shield before the site loads. Treat those as unverifiable, not dead. A timeout alone is also inconclusive; call a host dead only with more evidence (`eneldistribuicaosp.com.br` timed out on HTTP and HTTPS, and Enel SP had moved to `enel.com.br`).
+Pirate streaming sites are out of scope (the `$popup` rule for them was removed); the local antivirus web shield also intercepts most of them, so they cannot be audited here. A timeout alone is also inconclusive; call a host dead only with more evidence (`eneldistribuicaosp.com.br` timed out on HTTP and HTTPS, and Enel SP had moved to `enel.com.br`).
 
 Edge would offer to translate pages; the throwaway profile is written with `translate.enabled=false` and pt-BR accept-languages before launch. Close the browser through `browser.close()`: the spawned `msedge.exe` is only a launcher, so killing that process leaves the real browser running.
 
