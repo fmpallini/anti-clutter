@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: Anti-Clutter BR
-! Version: 2026.09.25.0131
-! Last modified: 25 Sep 2026 01:31 UTC
+! Version: 2026.09.28.0028
+! Last modified: 28 Sep 2026 00:28 UTC
 ! Expires: 2 days
 ! Description: Filtros contra anti-adblock, paywall, pop-ups e anúncios em sites brasileiros, complementando listas internacionais sem conflitar com elas.
 ! Homepage: https://github.com/fmpallini/anti-clutter
@@ -10,7 +10,7 @@
 ! Fork de: https://github.com/ialexsilva/anti-clutter (Alex Silva)
 !
 ! Foco: sites brasileiros. Sites estrangeiros ficam a cargo de outras listas.
-! Compatibilidade: regras de rede e cosméticas funcionam em qualquer bloqueador.
+! Compatibilidade: validada com AGLint para uBlock Origin, AdGuard e Adblock Plus.
 ! As regras "##+js(...)" (scriptlets) exigem uBlock Origin ou AdGuard.
 
 
@@ -39,7 +39,6 @@ folha.uol.com.br##.c-push-notification
 ||*.estadao.com.br/paywall/*
 ||assets.estadao.com.br/access.js$script
 estadao.com.br##paywall-wrapper-iframe-estadao
-@@/s2016/portal/js/advertisement.js$script,domain=estadao.com.br
 www.estadao.com.br##.assine-bar
 
 ! JOTA - https://jota.info
@@ -62,8 +61,8 @@ netdeal.js*$script
 ||*.cloudfunctions.net^$xhr,domain=veja.abril.com.br
 
 ! Abril (Quatro Rodas, Veja e demais sites) - paywall medido e detector de adblock
-||abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/$script,1p
-||abril.com.br/wp-content/plugins/abril-plugins/abril-adblock-detector/$script,1p
+||abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/$script,~third-party
+||abril.com.br/wp-content/plugins/abril-plugins/abril-adblock-detector/$script,~third-party
 ||fundingchoicesmessages.google.com^$domain=abril.com.br
 
 ! Fivewall - https://fivewall.com.br
@@ -74,43 +73,33 @@ fivewall.js*$script
 !-------------------------- Anti-Adblock --------------------------!
 !------------------------------------------------------------------!
 
-@@/wp-content/themes/Sophia/js/advertisement.js$script
 @@||animesvision.com.br*$generichide
-@@/jannah/*js/advertisement.js|$~third-party
-@@/ads.js$script,domain=gamersclub.com.br
-@@||gamersclub.com.br/assets/js/shared/trackings/adsbygoogle.js
-@@||www.isptools.com.br/js/ads.js$script,1p
 
 !------------------------------------------------------------------!
 !------------------------- Aborrecimentos -------------------------!
 !------------------------------------------------------------------!
 
-*betterpop*$script,first-party
+*betterpop*$script,~third-party
 ! 2024-02-21 https://statusinvest.com.br
 statusinvest.com.br##.to-load.pt-5.pr-sm-0.pl-sm-0.ads-lazy-group
 statusinvest.com.br##.container-home-ads-thin.container
-||sendpulse.com^$third-party
-||livejasmin.com^$document
-||bet365.com^$document
-||1xbet.com^$document
-||mackeeper.com^$document
 modal-extensao.*$domain=canaltech.com.br
-||pushanert.com^$third-party
-||pushalert.co^$third-party
 ||pushnews.eu^$third-party
-||cdn.pn.vg^$third-party
 @@||www.googletagmanager.com/gtag/js$script,domain=eneldistribuicaosp.com.br
-@@||ticket.com.br/souticket/assets/components/*$script,domain=ticket.com.br
-@@||ipinfo.io^$xmlhttprequest,domain=brasilbandalarga.com.br
+! UOL - https://www.uol.com.br
+! $important: o bloqueador do Vivaldi só aplicou estas duas regras com ele. O Adblock Plus rejeita a regra
+! inteira por causa do $important, daí a cópia sem ele logo abaixo de cada uma.
+! aglint-disable-next-line no-invalid-modifiers
 ||conteudo.jsuol.com.br/p/perfil/js/widgetNotify.v3.js$script,domain=uol.com.br,important
+||conteudo.jsuol.com.br/p/perfil/js/widgetNotify.v3.js$script,domain=uol.com.br
 ||c.jsuol.com.br/assets/?loadComponent=media&contentType=js&tpl=assets/dist/service-worker/webalert-notification*$script,domain=www.uol.com.br
 uol.com.br##+js(addEventListener-defuser.js, copy)
+! aglint-disable-next-line no-invalid-modifiers
 ||fundingchoicesmessages.google.com^$script,domain=uol.com.br,important
-uol.com.br##.fc-ab-root, .fc-dialog-container
-@@||hcaptcha.com
-||pourdear.com^$script,domain=vizer.tv
-||cdn.pn.vg^$script,domain=r7.com
-||noticias.r7.com/pushnews-sw.js$xhr,1p
+||fundingchoicesmessages.google.com^$script,domain=uol.com.br
+uol.com.br##.fc-ab-root
+uol.com.br##.fc-dialog-container
+! R7 - https://r7.com
 r7.com##div[class*="card-fixed"]:has(.push-web-notification__button)
 r7.com##.vjs-r7-block-msg
 r7.com##header .b-header-link
@@ -121,10 +110,3 @@ r7.com##.ad-header-size
 !------------------------------------------------------------------!
 
 *$popup,domain=filmesonlinehd1x.com|mmfilmes.tv|megafilmesahd.com|assistirfilmesonline.cc|thenightseries.net|fbseries.com|megacinefilmes.com|superflix.net|overflix.net|vizer.tv,third-party
-
-!------------------------------------------------------------------!
-!--------------------------- Stylesheet ---------------------------!
-!------------------------------------------------------------------!
-
-omelete.com.br##.banner
-

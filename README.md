@@ -21,15 +21,20 @@ Cole esse endereço no campo de lista personalizada do seu bloqueador:
 - **AdGuard** (extensão): Configurações > Filtros > Filtros personalizados > *Adicionar filtro personalizado* > cole o endereço.
 - **Adblock Plus**: Configurações avançadas > *Adicionar nova lista de filtros* (Filter lists > Add a filter list) > cole o endereço.
 - **Brave**: Configurações > Shields > *Content filtering* > *Add custom filter list* > cole o endereço.
+- **Vivaldi**: Configurações > Privacidade e segurança > Bloqueio de rastreadores e anúncios > *Gerenciar fontes* > Fontes de bloqueio de anúncios > *+* > cole o endereço.
 
 ### Compatibilidade
-- Regras de rede e cosméticas funcionam em qualquer bloqueador compatível com a sintaxe do Adblock Plus.
-- As regras `##+js(...)` (scriptlets) só funcionam no **uBlock Origin** e no **AdGuard**. Nos demais são ignoradas.
+- **uBlock Origin** e **AdGuard**: a lista inteira funciona.
+- **Adblock Plus**: regras de rede e cosméticas funcionam; as regras `##+js(...)` (scriptlets) são ignoradas. As duas regras com `$important` (que o ABP rejeita) têm uma cópia sem essa opção.
+- **Brave** e **Vivaldi** (bloqueadores embutidos): regras de rede funcionam; cosméticas e scriptlets dependem do suporte de cada navegador.
+- **Chrome**: o uBlock Origin Lite (a versão que o Chrome ainda aceita) não permite listas personalizadas. Use AdGuard, Adblock Plus ou outro navegador.
+
+A sintaxe é validada com [AGLint](https://github.com/AdguardTeam/AGLint) para uBlock Origin, AdGuard e Adblock Plus a cada commit e no GitHub Actions.
 
 ### Regras
 Sintaxe: https://adblockplus.org/filter-cheatsheet
 
-O arquivo está dividido em seções: Anti-Paywall, Anti-Adblock, Aborrecimentos (notificações push, pop-ups indesejados, sites de apostas), Pop-ups e Stylesheet (banners específicos por site).
+O arquivo está dividido em seções: Anti-Paywall, Anti-Adblock, Aborrecimentos (notificações push, pop-ups indesejados, bloqueio de cópia, banners) e Pop-ups.
 
 ### Licença
 [GPLv3](LICENSE).
@@ -39,4 +44,7 @@ Ative o hook versionado do repositório. Ele atualiza `Version` e `Last modified
 
 ```
 git config core.hooksPath .githooks
+cd tools && npm install   # instala o AGLint usado pelo hook
 ```
+
+Regras novas não devem repetir o que EasyList, EasyPrivacy e as listas regionais em português já fazem. Confira com `node tools/dupcheck.mjs`.
