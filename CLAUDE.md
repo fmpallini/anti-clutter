@@ -62,7 +62,9 @@ Consequences to keep in mind:
 - Run `node selftest-browser.mjs` to list the automation signals of the current setup.
 - The audits call `waitForChallenge()` after each navigation so an interstitial challenge is not mistaken for the page.
 
-Still blocked with a hard 403 even in the real browser: `superflix.net`, `filmesonlinehd1x.com` (their own access rules, not a challenge). `vizer.tv` and `eneldistribuicaosp.com.br` time out. Treat those as unverifiable, not dead.
+Unverifiable from this machine: `superflix.net`, `filmesonlinehd1x.com`, `thenightseries.net` and `vizer.tv` are intercepted by the local antivirus web shield before the site loads. Treat those as unverifiable, not dead. A timeout alone is also inconclusive; call a host dead only with more evidence (`eneldistribuicaosp.com.br` timed out on HTTP and HTTPS, and Enel SP had moved to `enel.com.br`).
+
+Edge would offer to translate pages; the throwaway profile is written with `translate.enabled=false` and pt-BR accept-languages before launch. Close the browser through `browser.close()`: the spawned `msedge.exe` is only a launcher, so killing that process leaves the real browser running.
 
 ### How to read the result
 
@@ -107,7 +109,7 @@ The engine is Ghostery's reimplementation of the uBO scriptlets, not uBO itself.
 - `$document` and `$popup` rules cannot be tested this way. Popups can only be checked by seeing whether a site still navigates or opens windows, which needs manual verification.
 - Exception rules (`@@`) only matter when another list (or ours) blocks the same request. The audit cannot show that; `dupcheck.mjs` can (see "Duplicates").
 - A metered paywall may need more reads than the article count to trigger; raise `--articles` if no wall appears in `plain` mode.
-- Anti-adblock walls from Google Funding Choices never appeared, even in the real headed Edge with ad requests aborted (UOL, Abril, GamersClub). The Abril rules are therefore reasoned from the plugin source, not verified. UOL loads Funding Choices too and its rule blocks those requests, but no wall was seen with or without it. The message may depend on per-publisher settings or user sampling (unconfirmed), so absence here is not proof it never shows.
+- Anti-adblock walls from Google Funding Choices never appeared, even in the real headed Edge with ad requests aborted (UOL, Abril, GamersClub). The Abril paywall itself is verified (2026-09-28: walls on 6/12 Veja and 9/12 Quatro Rodas articles in `plain`, 0 in `list`, all text 5.6k+); blocking the two plugin scripts also stops the Funding Choices and `cloudfunctions.net` calls they make, so separate rules for those were dropped. UOL loads Funding Choices too and its rule blocks those requests, but no wall was seen with or without it. The message may depend on per-publisher settings or user sampling (unconfirmed), so absence here is not proof it never shows.
 
 ### Duplicates (`dupcheck.mjs`)
 

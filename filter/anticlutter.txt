@@ -1,7 +1,7 @@
 [Adblock Plus 2.0]
 ! Title: Anti-Clutter BR
-! Version: 2026.09.28.0057
-! Last modified: 28 Sep 2026 00:57 UTC
+! Version: 2026.09.28.0118
+! Last modified: 28 Sep 2026 01:18 UTC
 ! Expires: 2 days
 ! Description: Filtros contra anti-adblock, paywall, pop-ups e anúncios em sites brasileiros, complementando listas internacionais sem conflitar com elas.
 ! Homepage: https://github.com/fmpallini/anti-clutter
@@ -20,13 +20,6 @@
 
 ! O Globo - https://oglobo.globo.com
 ||static.infoglobo.com.br/paywall/*
-oglobo.globo.com##barreiraRegisterExclusiva
-oglobo.globo.com##section.block--advertising.block
-oglobo.globo.com##section.four-subpanes-with-advertising.block
-oglobo.globo.com##.block__advertising-content
-blogs.oglobo.globo.com###pub-fullbanner-1
-blogs.oglobo.globo.com###pub-box-materia
-oglobo.globo.com##.block__subpane--advertising.block__subpane
 
 ! Folha de S.Paulo - https://folha.uol.com.br
 ||paywall.folha.uol.com.br/*$script,xhr
@@ -38,33 +31,23 @@ folha.uol.com.br##.c-push-notification
 ! Estadão - https://estadao.com.br
 ||*.estadao.com.br/paywall/*
 ||assets.estadao.com.br/access.js$script
-estadao.com.br##paywall-wrapper-iframe-estadao
-www.estadao.com.br##.assine-bar
 
 ! O Povo - https://www.opovo.com.br
 ! Paywall medido: depois de ~2 leituras route.php responde paywall=true e o script apaga o texto já carregado.
 ! O conteúdo do O POVO+ (mais.opovo.com.br) é cortado no servidor; não há o que bloquear.
 ||www.opovo.com.br/DS/public/js/dev/paywall.js$script
 
-! Gazeta do Povo - https://gazetadopovo.com.br
-gazetadopovo.com.br##.c-assine-container
-
-! Tynypass - https://tinypass.com
+! Piano/Tinypass - https://tinypass.com (muro de O Globo, Gazeta do Povo, Valor, GZH)
 ||tinypass.com^$third-party
 tinypass.min.js*$script
 
-! Neatdeal - https://netdeal.com.br
+! Netdeal - https://netdeal.com.br
 ||netdeal.com.br^$third-party
 netdeal.js*$script
-
-! VEJA
-! 2022-01-06 https://veja.abril.com.br
-||*.cloudfunctions.net^$xhr,domain=veja.abril.com.br
 
 ! Abril (Quatro Rodas, Veja e demais sites) - paywall medido e detector de adblock
 ||abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/$script,~third-party
 ||abril.com.br/wp-content/plugins/abril-plugins/abril-adblock-detector/$script,~third-party
-||fundingchoicesmessages.google.com^$domain=abril.com.br
 
 ! Fivewall - https://fivewall.com.br
 ||fivewall.com.br^$third-party
@@ -74,12 +57,10 @@ fivewall.js*$script
 !------------------------- Aborrecimentos -------------------------!
 !------------------------------------------------------------------!
 
-*betterpop*$script,~third-party
 ! 2024-02-21 https://statusinvest.com.br
 statusinvest.com.br##.to-load.pt-5.pr-sm-0.pl-sm-0.ads-lazy-group
 statusinvest.com.br##.container-home-ads-thin.container
 ||pushnews.eu^$third-party
-@@||www.googletagmanager.com/gtag/js$script,domain=eneldistribuicaosp.com.br
 ! UOL - https://www.uol.com.br
 ! $important: o bloqueador do Vivaldi só aplicou estas duas regras com ele. O Adblock Plus rejeita a regra
 ! inteira por causa do $important, daí a cópia sem ele logo abaixo de cada uma.
