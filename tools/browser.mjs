@@ -52,10 +52,14 @@ async function attach({ executablePath, kind }) {
   browser.attached = true;
   const realClose = browser.close.bind(browser);
   browser.close = async () => {
+    // O msedge.exe lançado é só um launcher: o navegador de verdade roda desanexado, então proc.kill() não o
+    // fecha e ele ficava aberto fora da tela, segurando o perfil. Browser.close via CDP fecha o processo real.
+    try { await (await browser.newBrowserCDPSession()).send('Browser.close'); } catch {}
     await realClose().catch(() => {});
     proc.kill();
-    await new Promise(r => setTimeout(r, 1000));
-    fs.rmSync(profile, { recursive: true, force: true, maxRetries: 3 });
+    // Os processos filhos ainda levam alguns segundos para soltar os arquivos do perfil.
+    try { fs.rmSync(profile, { recursive: true, force: true, maxRetries: 20, retryDelay: 500 }); }
+    catch (e) { console.error(`aviso: não consegui apagar o perfil temporário ${profile} (${e.code})`); }
   };
   return browser;
 }
@@ -80,9 +84,17 @@ export async function launchBrowser() {
 // então NÃO registre init scripts nele (valeriam para todos): use page.addInitScript.
 export async function newContext(browser, extra = {}) {
   if (browser.attached) {
-    const ctx = browser.contexts()[0];
-    ctx.close = async () => { for (const p of ctx.pages()) await p.close().catch(() => {}); }; // só fecha as abas
-    return ctx;
+    // O contexto padrão é compartilhado por todos os sites auditados em paralelo: cada chamada recebe um
+    // invólucro cujo close() fecha só as abas que ele mesmo abriu, e não as dos outros sites.
+    const ctx = browser.contexts()[0], mine = [];
+    return new Proxy(ctx, {
+      get(target, prop) {
+        if (prop === 'newPage') return async () => { const p = await target.newPage(); mine.push(p); return p; };
+        if (prop === 'close') return async () => { for (const p of mine) await p.close().catch(() => {}); };
+        const v = Reflect.get(target, prop);
+        return typeof v === 'function' ? v.bind(target) : v;
+      },
+    });
   }
   let userAgent;
   const probe = await browser.newContext();
