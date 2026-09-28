@@ -6,6 +6,7 @@ Filter list (Adblock Plus syntax) that blocks paywalls, anti-adblock walls, push
 - This is a fork of `ialexsilva/anti-clutter`; keep the credit in the header and README.
 - `.githooks/pre-commit` rewrites `Version` and `Last modified` whenever the filter is committed. Enable it in a fresh clone with `git config core.hooksPath .githooks`. Do not edit those two header lines by hand.
 - Scriptlet rules (`##+js(...)`) only work in uBlock Origin and AdGuard, but the tooling below can validate them (see "Scriptlets").
+- Every rule must be valid in uBO, AdGuard **and** Adblock Plus. `aglint.config.json` lints for all three; the pre-commit hook runs it (when `tools/node_modules` exists) and so does `.github/workflows/lint.yml`. Run it with `cd tools && npm run lint`. Write options in their portable form: `~third-party`, not `1p`/`first-party`. ABP rejects the whole rule on `$important`; when `$important` is really needed (Vivaldi only applied the UOL rules with it), put `! aglint-disable-next-line no-invalid-modifiers` above it and a copy without `$important` below it.
 
 ## Evaluating rules against real sites
 
@@ -25,6 +26,7 @@ node audit.mjs --mode adblock --articles 12 <home-url>...
 node audit.mjs --mode list    --articles 12 [--out result.json] <home-url>...
 node audit.mjs --mode list --scriptlets <home-url>...   # also inject the list's ##+js scriptlets
 node scriptlets-check.mjs [--only "<rule fragment>"]    # validate each scriptlet rule (see below)
+node dupcheck.mjs [--refresh] [--only "<rule fragment>"] # compare with international lists (see "Duplicates")
 ```
 
 `browser.mjs` launches the browser, `selftest-browser.mjs` prints the automation signals it exposes, and `lib.mjs` holds shared helpers (engine + scriptlet resources, scriptlet injection, article-link heuristic).
@@ -54,7 +56,7 @@ The tools run the installed **Edge (or Chrome) as a normal headed process** on a
 
 Consequences to keep in mind:
 - Do not register init scripts on the context in attach mode; it is the browser's default context, so they would apply to every page. Use `page.addInitScript` (the tools already do).
-- `newContext(browser)` returns that default context, and its `close()` only closes tabs. Cookies of one domain persist across a run (fresh profile per run, so metered-paywall state resets between runs).
+- `newContext(browser)` returns a wrapper around that default context whose `close()` only closes the tabs opened through that wrapper (the audit runs sites in parallel in the same context; closing every tab killed the other sites). Cookies of one domain persist across a run (fresh profile per run, so metered-paywall state resets between runs).
 - A real window is opened off-screen; it may steal focus briefly on Windows.
 - `LAUNCH=playwright` (with `BROWSER`, `CHROME_PATH`, `HEADED=1`) falls back to a Playwright-launched, hardened browser (no `--enable-automation`, no `AutomationControlled`, real version in the UA, notification permission `default` so push prompts appear). It is not accepted by Cloudflare-protected sites but works elsewhere.
 - Run `node selftest-browser.mjs` to list the automation signals of the current setup.
@@ -102,16 +104,30 @@ The engine is Ghostery's reimplementation of the uBO scriptlets, not uBO itself.
 
 - No login, so post-login behavior is untested. The audit cannot catch a rule that breaks login (see step 5 of "Investigating a new site"); check login redirects by hand and ask the user to confirm on a real account.
 - Some sites hard-block the test browser (403 without a challenge) or time out; those need a manual check. See "Browser".
-- `$document` rules (bet365, 1xbet, livejasmin, mackeeper) and `$popup` rules cannot be tested this way. Popups can only be checked by seeing whether a site still navigates or opens windows, which needs manual verification.
-- Exception rules (`@@`) only matter when another list blocks the same request, so they cannot be validated in isolation.
+- `$document` and `$popup` rules cannot be tested this way. Popups can only be checked by seeing whether a site still navigates or opens windows, which needs manual verification.
+- Exception rules (`@@`) only matter when another list (or ours) blocks the same request. The audit cannot show that; `dupcheck.mjs` can (see "Duplicates").
 - A metered paywall may need more reads than the article count to trigger; raise `--articles` if no wall appears in `plain` mode.
-- Anti-adblock walls from Google Funding Choices never appeared, even in the real headed Edge with ad requests aborted (UOL, Abril, GamersClub). The Abril rules are therefore reasoned from the plugin source, not verified. UOL loads Funding Choices too, but with no visible wall there is nothing to block, so no rule was added. The message may depend on per-publisher settings or user sampling (unconfirmed), so absence here is not proof it never shows.
+- Anti-adblock walls from Google Funding Choices never appeared, even in the real headed Edge with ad requests aborted (UOL, Abril, GamersClub). The Abril rules are therefore reasoned from the plugin source, not verified. UOL loads Funding Choices too and its rule blocks those requests, but no wall was seen with or without it. The message may depend on per-publisher settings or user sampling (unconfirmed), so absence here is not proof it never shows.
+
+### Duplicates (`dupcheck.mjs`)
+
+`tools/dupcheck.mjs` downloads (and caches in `tools/.cache`) EasyList, EasyPrivacy, the Portuguese regionals (AdGuard Spanish/Portuguese, which uBO enables for pt-BR, and EasyList Portuguese), the uBO default lists, AdGuard Base and the optional annoyance lists (shown in [brackets]). For each of our rules it builds a sample request or page, checks that our list really acts on it, and asks each list what it does:
+
+| verdict | meaning | action |
+|---|---|---|
+| `DUPLICADA` | another list already blocks/hides it | remove if that list is EasyList, EasyPrivacy or a pt regional (on by default in every blocker); keep if it is only in uBO filters, AdGuard Base or an optional list (other blockers or users lack it) |
+| `ANULADA` | another list has an `@@` for it | our rule loses in uBO/AdGuard; needs `$important` or another target |
+| `SEM ALVO` | our `@@` unblocks something no list blocks | no-op; removal candidate |
+| `NECESSÁRIA` | our `@@` undoes a real block (from another list or ours) | keep |
+
+The sample is one URL, not everything a rule covers, so read the detail line before removing. An identical `@@` in another list only shows up when that list also blocks the URL, so `SEM ALVO` can also mean "already excepted elsewhere"; both are no-ops.
 
 ## Workflow for changes
 
 1. Audit affected sites with the tool (`plain`, then `list`).
-2. Edit `filter/anticlutter.txt`; put rules under the right section and site comment, keeping Brazilian sites only.
-3. Re-run `--mode list` on the sites you touched and keep the numbers (walls, text length) for the commit message.
-4. Commit; the hook bumps the version. Never remove a rule on homepage-only evidence.
+2. Run `node tools/dupcheck.mjs`; do not add what EasyList, EasyPrivacy or the pt regionals already do.
+3. Edit `filter/anticlutter.txt`; put rules under the right section and site comment, keeping Brazilian sites only.
+4. Re-run `--mode list` on the sites you touched and keep the numbers (walls, text length) for the commit message.
+5. Commit; the hook lints and bumps the version. Never remove a rule on homepage-only evidence.
 
-Test results are not committed; `tools/*.json` is ignored.
+Test results are not committed; `tools/*.json` and `tools/.cache` are ignored.

@@ -1,0 +1,5 @@
+{
+  "root": true,
+  "extends": ["aglint:recommended"],
+  "platforms": ["ubo_any", "adg_any", "abp_any"]
+}

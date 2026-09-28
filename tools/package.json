@@ -3,9 +3,16 @@
   "private": true,
   "type": "module",
   "description": "Ferramentas de auditoria das regras de filter/anticlutter.txt",
+  "scripts": {
+    "lint": "cd .. && aglint filter/anticlutter.txt",
+    "dupcheck": "node dupcheck.mjs"
+  },
   "dependencies": {
     "@ghostery/adblocker": "^2.0.0",
     "@ghostery/adblocker-playwright": "^2.18.2",
     "playwright-core": "^1.50.0"
+  },
+  "devDependencies": {
+    "@adguard/aglint": "4.0.0-beta.5"
   }
 }

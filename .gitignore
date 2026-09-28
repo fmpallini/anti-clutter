@@ -4,3 +4,4 @@ tools/*.json
 !tools/package-lock.json
 .wrangler/
 .dev.vars
+tools/.cache/
